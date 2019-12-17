@@ -12,9 +12,9 @@ app.get('/hello-world', (req, res) => {
   res.send({'data': 'Hello World'});
 });
 
-app.get('/v14/hello-world', (req, res) => {
+app.get('/v2/hello-world', (req, res) => {
   console.log('New request received');
-  res.send({'data': 'Hello World from version 12!'});
+  res.send({'data': 'Hello World from version 2!'});
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
