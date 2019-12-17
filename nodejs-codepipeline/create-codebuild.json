@@ -1,0 +1,25 @@
+{
+    "name": "nodejs-codebuild-project",
+    "description": "CodeBuild project for nodejs project",
+    "source": {
+        "type": "CODECOMMIT",
+        "location": "https://git-codecommit.us-east-1.amazonaws.com/v1/repos/nodejs-hello-world"
+    },
+    "artifacts": {
+        "type": "NO_ARTIFACTS"
+    },
+    "environment": {
+        "type": "LINUX_CONTAINER",
+        "image": "aws/codebuild/standard:2.0-1.13.0",
+        "computeType": "BUILD_GENERAL1_SMALL",
+        "imagePullCredentialsType": "CODEBUILD",
+        "privilegedMode": true
+    },
+    "serviceRole": "CodeBuildPullECRImagesRole",
+    "timeoutInMinutes": 5,
+    "logsConfig": {
+        "cloudWatchLogs": {
+            "status": "ENABLED"
+        }
+    }
+}

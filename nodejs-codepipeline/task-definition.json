@@ -1,0 +1,19 @@
+{
+    "containerDefinitions": [
+      {
+        "name": "nodejs-hello-world",
+        "image": "<IMAGE1_NAME>",
+        "memory": 512,
+        "cpu": 128,
+        "essential": true,
+        "portMappings": [
+          {
+             "containerPort": 8080,
+             "protocol": "tcp"
+          }
+        ]
+      }
+    ],
+    "family": "nodejs-hello-world-task-def",
+    "taskRoleArn": "arn:aws:iam::548754742764:role/ecsTaskExecutionRole"
+}

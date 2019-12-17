@@ -1,0 +1,101 @@
+{
+    "pipeline": {
+        "name": "nodejs-codepipeline",
+        "roleArn": "arn:aws:iam::548754742764:role/service-role/AWSCodePipelineServiceRole-us-east-1-express-pipeline",
+        "artifactStore": {
+            "type": "S3",
+            "location": "codepipeline-us-east-1-493918737827"
+        },
+        "stages": [
+            {
+                "name": "Source",
+                "actions": [
+                    {
+                        "name": "Source",
+                        "actionTypeId": {
+                            "category": "Source",
+                            "owner": "AWS",
+                            "provider": "CodeCommit",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "BranchName": "master",
+                            "PollForSourceChanges": "false",
+                            "RepositoryName": "nodejs-hello-world"
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "SourceArtifact"
+                            }
+                        ],
+                        "inputArtifacts": [],
+                        "region": "us-east-1"
+                    }
+                ]
+            },
+            {
+                "name": "Build",
+                "actions": [
+                    {
+                        "name": "Build",
+                        "actionTypeId": {
+                            "category": "Build",
+                            "owner": "AWS",
+                            "provider": "CodeBuild",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "ProjectName": "nodejs-codebuild-project"
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "BuildArtifact"
+                            }
+                        ],
+                        "inputArtifacts": [
+                            {
+                                "name": "SourceArtifact"
+                            }
+                        ],
+                        "region": "us-east-1"
+                    }
+                ]
+            },
+            {
+                "name": "Deploy",
+                "actions": [
+                    {
+                        "name": "Deploy",
+                        "actionTypeId": {
+                            "category": "Deploy",
+                            "owner": "AWS",
+                            "provider": "CodeDeployToECS",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "AppSpecTemplateArtifact": "BuildArtifact",
+                            "AppSpecTemplatePath": "appspec.yml",
+                            "ApplicationName": "nodejs-hello-world-codedeploy",
+                            "DeploymentGroupName": "nodejs-hello-world-deployment-group",
+                            "Image1ArtifactName": "BuildArtifact",
+                            "Image1ContainerName": "IMAGE1_NAME",
+                            "TaskDefinitionTemplateArtifact": "BuildArtifact",
+                            "TaskDefinitionTemplatePath": "task-definition.json"
+                        },
+                        "outputArtifacts": [],
+                        "inputArtifacts": [
+                            {
+                                "name": "BuildArtifact"
+                            }
+                        ],
+                        "region": "us-east-1"
+                    }
+                ]
+            }
+        ],
+        "version": 1
+    }
+}

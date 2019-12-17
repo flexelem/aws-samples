@@ -1,0 +1,56 @@
+{
+    "applicationName": "nodejs-hello-world-codedeploy",
+    "deploymentGroupName": "nodejs-hello-world-deployment-group",
+    "deploymentConfigName": "CodeDeployDefault.ECSAllAtOnce",
+    "serviceRoleArn": "arn:aws:iam::548754742764:role/CodeDeployRoleForNodeJSHelloWorld",
+    "autoRollbackConfiguration": {
+        "enabled": true,
+        "events": [
+            "DEPLOYMENT_FAILURE"
+        ]
+    },
+    "deploymentStyle": {
+        "deploymentType": "BLUE_GREEN",
+        "deploymentOption": "WITH_TRAFFIC_CONTROL"
+    },
+    "blueGreenDeploymentConfiguration": {
+        "terminateBlueInstancesOnDeploymentSuccess": {
+            "action": "TERMINATE",
+            "terminationWaitTimeInMinutes": 30
+        },
+        "deploymentReadyOption": {
+            "actionOnTimeout": "STOP_DEPLOYMENT",
+            "waitTimeInMinutes": 15
+        }
+    },
+    "loadBalancerInfo": {
+        "targetGroupPairInfoList": [
+            {
+                "targetGroups": [
+                    {
+                        "name": "example-target-group"
+                    },
+                    {
+                        "name": "example-target-group-2"
+                    }
+                ],
+                "prodTrafficRoute": {
+                    "listenerArns": [
+                        "arn:aws:elasticloadbalancing:us-east-1:548754742764:listener/app/example-elb/032e1db0729e6a4d/4e6cc15529fee718"
+                    ]
+                },
+                "testTrafficRoute": {
+                    "listenerArns": [
+                        "arn:aws:elasticloadbalancing:us-east-1:548754742764:listener/app/example-elb/032e1db0729e6a4d/9c74c6a5f93e618a"
+                    ]
+                }
+            }
+        ]
+    },
+    "ecsServices": [
+        {
+            "serviceName": "example-ecs-service",
+            "clusterName": "example-ecs-cluster"
+        }
+    ]
+}
